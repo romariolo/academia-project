@@ -1,0 +1,157 @@
+/* src/styles/personal/CreateWorkout.css */
+
+.create-workout-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 1rem;
+  color: #222;
+}
+
+.label-select {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #34495e;
+}
+
+select#select-aluno {
+  width: 100%;
+  max-width: 300px;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+
+.voltar-btn {
+  background: none;
+  border: none;
+  color: #2980b9;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 2rem;
+  user-select: none;
+  transition: color 0.3s ease;
+}
+
+.voltar-btn:hover {
+  color: #1c5980;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  border-radius: 10px;
+  padding: 2rem;
+  max-width: 500px;
+  width: 100%;
+  position: relative;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+.modal-content label {
+  display: block;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: #34495e;
+}
+
+.modal-content input[type="text"],
+.modal-content input[type="number"],
+.modal-content input[type="file"] {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.3rem;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.add-btn {
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.add-btn:hover {
+  background-color: #1e8449;
+}
+
+.video-btn,
+.video-btn-small {
+  background-color: #2980b9;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 700;
+  margin-left: 0.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.video-btn:hover,
+.video-btn-small:hover {
+  background-color: #1c5980;
+}
+
+.video-btn-small {
+  padding: 0.2rem 0.5rem;
+  font-size: 0.9rem;
+}
+
+.exercicios-lista h4 {
+  margin-bottom: 0.5rem;
+  color: #34495e;
+}
+
+.exercicios-lista ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.exercicios-lista li {
+  margin-bottom: 0.6rem;
+}
+
+.close-btn {
+  background-color: #c0392b;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.4rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: background-color 0.3s ease;
+}
+
+.close-btn:hover {
+  background-color: #922b21;
+}

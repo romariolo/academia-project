@@ -27,7 +27,7 @@ function ForgotPasswordPage() {
           <button type="submit">Enviar</button>
         </form>
         {mensagem && <p className="mensagem">{mensagem}</p>}
-        <Link to="/" className="link">Voltar ao Login</Link>
+        <Link to="/login" className="link">Voltar ao Login</Link>
       </div>
     </div>
   );

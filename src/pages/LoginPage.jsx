@@ -1,20 +1,44 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../styles/LoginPage.css';
 
 function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  // Usuários fake
+  const fakeUsers = [
+    {
+      email: 'personal@email.com',
+      password: 'a123456',
+      role: 'personal'
+    },
+    // você pode adicionar mais usuários aqui futuramente
+  ];
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert(`Bem-vindo, ${username}!`);
+
+    const userFound = fakeUsers.find(
+      (u) => u.email === username && u.password === password
+    );
+
+    if (userFound) {
+      alert(`Bem-vindo, ${userFound.role}!`);
+      if (userFound.role === 'personal') {
+        navigate('/personal/dashboard');
+      }
+      // Aqui futuramente dá pra colocar redirecionamento para outros roles
+    } else {
+      alert('Usuário ou senha inválidos!');
+    }
   };
 
   return (
     <div className="login-container">
       <div className="login-box">
-        <h2>Login</h2>
+        <h2>Bem Vindo ao Smart Personal</h2>
         <form onSubmit={handleSubmit}>
           <div className="textbox">
             <input

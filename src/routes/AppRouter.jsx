@@ -1,21 +1,27 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
+import { Route, Routes, Navigate } from 'react-router-dom';
 import LoginPage from '../pages/LoginPage';
 import RegisterPage from '../pages/RegisterPage';
-import DashboardPage from '../pages/DashboardPage';
-import ForgotPasswordPage from '../pages/ForgotPasswordPage'; // <-- IMPORTAR AQUI
+import ForgotPasswordPage from '../pages/ForgotPasswordPage';
+
+import PersonalDashboard from '../pages/personal/PersonalDashboard';
+import StudentsList from '../pages/personal/StudentsList';
+import CreateWorkout from '../pages/personal/CreateWorkout';
+import EditWorkout from '../pages/personal/EditWorkout';
+import ProgressView from '../pages/personal/ProgressView';
 
 function AppRouter() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/forgot-password" element={<ForgotPasswordPage />} /> {/* ROTA ESQUECI A SENHA */}
-      </Routes>
-    </Router>
+    <Routes>
+      <Route path="/" element={<Navigate to="/login" />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/personal/dashboard" element={<PersonalDashboard />} />
+      <Route path="/personal/students" element={<StudentsList />} />
+      <Route path="/personal/create-workout" element={<CreateWorkout />} />
+      <Route path="/personal/edit-workout/:id" element={<EditWorkout />} />
+      <Route path="/personal/progress/:id" element={<ProgressView />} />
+    </Routes>
   );
 }
 
