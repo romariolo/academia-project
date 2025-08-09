@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import alunosFake from '../../data/alunos';
+import alunosFake from '../../data/Students';
 import '../../styles/personal/CreateWorkout.css';
 
 export default function CreateWorkout() {
@@ -9,14 +9,20 @@ export default function CreateWorkout() {
   const [alunoSelecionado, setAlunoSelecionado] = useState(null);
   const [videoURL, setVideoURL] = useState('');
   const [exercicioNome, setExercicioNome] = useState('');
+  const [diaSemana, setDiaSemana] = useState('');
+  const [series, setSeries] = useState('');
   const [repeticoes, setRepeticoes] = useState('');
+  const [carga, setCarga] = useState('');
   const [exercicios, setExercicios] = useState([]);
 
   function abrirModal(aluno) {
     setAlunoSelecionado(aluno);
     setVideoURL('');
     setExercicioNome('');
+    setDiaSemana('');
+    setSeries('');
     setRepeticoes('');
+    setCarga('');
     setExercicios([]);
     setModalAberto(true);
   }
@@ -26,16 +32,34 @@ export default function CreateWorkout() {
   }
 
   function adicionarExercicio() {
-    if (!exercicioNome.trim() || !repeticoes.trim()) {
-      alert('Preencha o nome do exercício e a quantidade de repetições.');
+    if (
+      !exercicioNome.trim() ||
+      !diaSemana.trim() ||
+      !series.trim() ||
+      !repeticoes.trim() ||
+      !carga.trim()
+    ) {
+      alert(
+        'Preencha o nome do exercício, dia da semana, séries, repetições e a carga.'
+      );
       return;
     }
     setExercicios((prev) => [
       ...prev,
-      { nome: exercicioNome.trim(), repeticoes: repeticoes.trim(), videoURL },
+      {
+        nome: exercicioNome.trim(),
+        diaSemana: diaSemana.trim(),
+        series: series.trim(),
+        repeticoes: repeticoes.trim(),
+        carga: carga.trim(),
+        videoURL,
+      },
     ]);
     setExercicioNome('');
+    setDiaSemana('');
+    setSeries('');
     setRepeticoes('');
+    setCarga('');
     setVideoURL('');
   }
 
@@ -45,6 +69,16 @@ export default function CreateWorkout() {
       const url = URL.createObjectURL(file);
       setVideoURL(url);
     }
+  }
+
+  function handleSalvarTreino() {
+    if (exercicios.length === 0) {
+      alert('Adicione ao menos um exercício antes de salvar o treino.');
+      return;
+    }
+    // Aqui você pode implementar a lógica para salvar o treino no backend ou localStorage
+    alert(`Treino salvo com ${exercicios.length} exercício(s) para ${alunoSelecionado.nome}.`);
+    fecharModal();
   }
 
   return (
@@ -83,11 +117,31 @@ export default function CreateWorkout() {
             <h3>Treino para {alunoSelecionado.nome}</h3>
 
             <label>
+              Dia da Semana:
+              <input
+                type="text"
+                value={diaSemana}
+                onChange={(e) => setDiaSemana(e.target.value)}
+                placeholder="Ex: Segunda-feira"
+              />
+            </label>
+
+            <label>
               Nome do Exercício:
               <input
                 type="text"
                 value={exercicioNome}
                 onChange={(e) => setExercicioNome(e.target.value)}
+              />
+            </label>
+
+            <label>
+              Quantidade de Séries:
+              <input
+                type="number"
+                min="1"
+                value={series}
+                onChange={(e) => setSeries(e.target.value)}
               />
             </label>
 
@@ -98,6 +152,16 @@ export default function CreateWorkout() {
                 min="1"
                 value={repeticoes}
                 onChange={(e) => setRepeticoes(e.target.value)}
+              />
+            </label>
+
+            <label>
+              Carga (kg):
+              <input
+                type="text"
+                value={carga}
+                onChange={(e) => setCarga(e.target.value)}
+                placeholder="Ex: 10kg"
               />
             </label>
 
@@ -119,13 +183,20 @@ export default function CreateWorkout() {
               ➕ Adicionar Exercício
             </button>
 
+            <button
+              className="add-btn save-btn"
+              onClick={handleSalvarTreino}
+            >
+              💾 Salvar Treino
+            </button>
+
             <div className="exercicios-lista">
               <h4>Exercícios adicionados:</h4>
               {exercicios.length === 0 && <p>Nenhum exercício adicionado.</p>}
               <ul>
                 {exercicios.map((ex, idx) => (
                   <li key={idx}>
-                    <strong>{ex.nome}</strong> - {ex.repeticoes} repetições{' '}
+                    <strong>{ex.diaSemana}</strong> - {ex.nome} - {ex.series} séries - {ex.repeticoes} repetições - Carga: {ex.carga}{' '}
                     {ex.videoURL && (
                       <button
                         className="video-btn-small"

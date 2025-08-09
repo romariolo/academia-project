@@ -1,7 +1,7 @@
 // src/pages/personal/PersonalDashboard.jsx
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import alunosFake from '../../data/alunos';
+import alunosFake from '../../data/Students';
 import '../../styles/personal/PersonalDashboard.css';
 
 export default function PersonalDashboard() {
