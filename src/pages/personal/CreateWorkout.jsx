@@ -7,6 +7,7 @@ export default function CreateWorkout() {
   const navigate = useNavigate();
   const [modalAberto, setModalAberto] = useState(false);
   const [alunoSelecionado, setAlunoSelecionado] = useState(null);
+  const [videoOption, setVideoOption] = useState('');
   const [videoURL, setVideoURL] = useState('');
   const [exercicioNome, setExercicioNome] = useState('');
   const [diaSemana, setDiaSemana] = useState('');
@@ -17,6 +18,7 @@ export default function CreateWorkout() {
 
   function abrirModal(aluno) {
     setAlunoSelecionado(aluno);
+    setVideoOption('');
     setVideoURL('');
     setExercicioNome('');
     setDiaSemana('');
@@ -60,10 +62,11 @@ export default function CreateWorkout() {
     setSeries('');
     setRepeticoes('');
     setCarga('');
+    setVideoOption('');
     setVideoURL('');
   }
 
-  function handleVideoChange(e) {
+  function handleVideoFileChange(e) {
     const file = e.target.files[0];
     if (file) {
       const url = URL.createObjectURL(file);
@@ -76,7 +79,6 @@ export default function CreateWorkout() {
       alert('Adicione ao menos um exercício antes de salvar o treino.');
       return;
     }
-    // Aqui você pode implementar a lógica para salvar o treino no backend ou localStorage
     alert(`Treino salvo com ${exercicios.length} exercício(s) para ${alunoSelecionado.nome}.`);
     fecharModal();
   }
@@ -166,9 +168,38 @@ export default function CreateWorkout() {
             </label>
 
             <label>
-              Enviar Vídeo:
-              <input type="file" accept="video/*" onChange={handleVideoChange} />
+              Tipo de Vídeo:
+              <select
+                value={videoOption}
+                onChange={(e) => {
+                  setVideoOption(e.target.value);
+                  setVideoURL('');
+                }}
+              >
+                <option value="">-- Selecione --</option>
+                <option value="link">Link do YouTube</option>
+                <option value="arquivo">Arquivo de Vídeo</option>
+              </select>
             </label>
+
+            {videoOption === 'link' && (
+              <label>
+                Link do Vídeo (YouTube):
+                <input
+                  type="url"
+                  value={videoURL}
+                  onChange={(e) => setVideoURL(e.target.value)}
+                  placeholder="https://www.youtube.com/watch?v=..."
+                />
+              </label>
+            )}
+
+            {videoOption === 'arquivo' && (
+              <label>
+                Enviar Arquivo de Vídeo:
+                <input type="file" accept="video/*" onChange={handleVideoFileChange} />
+              </label>
+            )}
 
             {videoURL && (
               <button

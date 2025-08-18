@@ -1,34 +1,191 @@
 .students-list {
   max-width: 600px;
   margin: 2rem auto;
-  padding: 1.5rem;
-  background: #f5f5f5;
-  border-radius: 8px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.1);
-  font-family: Arial, sans-serif;
+  padding: 1.5rem; /* diminuído de 2rem para reduzir altura */
+  background: #fafafa;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  height: auto; /* garante que se ajuste ao conteúdo */
 }
 
 .students-list h1 {
   text-align: center;
-  margin-bottom: 1rem;
-  color: #333;
+  margin-bottom: 1.2rem; /* diminuído de 1.5rem */
+  color: #222;
+  font-weight: 700;
+  font-size: 1.8rem; /* levemente reduzido */
+  flex-shrink: 0;
+}
+
+/* Container para os filtros */
+.filtros-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem; /* menor para economizar espaço */
+  margin-bottom: 1.2rem;
+}
+
+.filtro-container {
+  flex: 1 1 220px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: #444;
+  user-select: none;
+}
+
+.filtro-container label {
+  min-width: 110px;
+}
+
+.filtro-container select {
+  flex: 1;
+  padding: 0.35rem 0.7rem; /* padding reduzido */
+  border: 1.8px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+  cursor: pointer;
+}
+
+.filtro-container select:hover,
+.filtro-container select:focus {
+  border-color: #2980b9;
+  outline: none;
 }
 
 .students-list ul {
-  list-style-type: none;
+  list-style: none;
   padding: 0;
+  margin: 0 0 1.2rem 0; /* reduzido */
 }
 
 .students-list li {
-  padding: 0.75rem 1rem;
-  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.7rem 1rem; /* reduzido */
+  margin-bottom: 0.6rem;
   background: #fff;
-  border-radius: 4px;
+  border-radius: 10px;
   border: 1px solid #ddd;
   cursor: default;
-  transition: background-color 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .students-list li:hover {
-  background-color: #e0e0e0;
+  background-color: #f0f8ff;
+  box-shadow: 0 4px 12px rgba(41, 128, 185, 0.3);
+}
+
+.aluno-nome {
+  font-weight: 700;
+  color: #2c3e50;
+  font-size: 1.05rem;
+}
+
+.situacao-financeira {
+  font-weight: 700;
+  padding: 0.25rem 0.8rem;
+  border-radius: 16px;
+  font-size: 0.9rem;
+  user-select: none;
+  margin-left: 10px;
+  min-width: 85px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: background-color 0.3s ease;
+}
+
+.situacao-financeira.pago {
+  background-color: #27ae60;
+  color: #fff;
+}
+
+.situacao-financeira.nao-pago {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+.situacao-treino {
+  margin-left: 10px;
+  padding: 3px 7px; /* menor */
+  border-radius: 5px;
+  font-size: 0.85rem;
+}
+
+.treino-ok {
+  background-color: #c8f7c5;
+  color: #2e7d32;
+}
+
+.treino-faltando {
+  background-color: #ffcdd2;
+  color: #c62828;
+}
+
+.paginacao {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.paginacao button {
+  background-color: #2980b9;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.95rem;
+  box-shadow: 0 3px 8px rgba(41, 128, 185, 0.4);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.paginacao button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.paginacao button:hover:not(:disabled) {
+  background-color: #1c5980;
+  box-shadow: 0 5px 14px rgba(28, 89, 128, 0.7);
+}
+
+.voltar-btn {
+  background: none;
+  border: none;
+  color: #2980b9;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: auto;
+  user-select: none;
+  transition: color 0.3s ease;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0.1rem 0;
+}
+
+.voltar-btn:hover {
+  color: #1c5980;
+}
+
+.nenhum-aluno {
+  text-align: center;
+  padding: 1rem; /* menor */
+  color: #777;
+  font-style: italic;
 }

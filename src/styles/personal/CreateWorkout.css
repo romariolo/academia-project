@@ -98,7 +98,7 @@ select#select-aluno {
   font-weight: 700;
   margin-bottom: 1rem;
   transition: background-color 0.3s ease;
-  margin-right: 50px;
+  margin-right: 10px;
 }
 
 .add-btn:hover {

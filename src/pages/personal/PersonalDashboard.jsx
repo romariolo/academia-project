@@ -1,18 +1,28 @@
-// src/pages/personal/PersonalDashboard.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import alunosFake from '../../data/Students';
 import '../../styles/personal/PersonalDashboard.css';
 
 export default function PersonalDashboard() {
   const navigate = useNavigate();
-  const totalAlunos = alunosFake.length;
+  
+  // Estado local que guarda a lista de alunos (copiada do arquivo original)
+  const [alunos, setAlunos] = useState(alunosFake);
+
+  const totalAlunos = alunos.length;
   const totalTreinos = 8; // pode ser dinâmico futuramente
 
+  // Função para atualizar treinoCadastrado de um aluno por ID
+  function atualizarTreinoCadastrado(idAluno, valor) {
+    setAlunos((old) =>
+      old.map((aluno) =>
+        aluno.id === idAluno ? { ...aluno, treinoCadastrado: valor } : aluno
+      )
+    );
+  }
+
   const handleLogout = () => {
-    // Limpar dados de autenticação/localStorage, se houver
     localStorage.removeItem('userToken');
-    // Redirecionar para login
     navigate('/login');
   };
 
