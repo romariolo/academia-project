@@ -165,3 +165,28 @@ select#select-aluno {
 .close-btn:hover {
   background-color: #922b21;
 }
+
+.edit-btn,
+.delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 0.5rem;
+  font-size: 1rem;
+}
+
+.edit-btn {
+  color: #27ae60;
+}
+
+.edit-btn:hover {
+  color: #1e8449;
+}
+
+.delete-btn {
+  color: #c0392b;
+}
+
+.delete-btn:hover {
+  color: #922b21;
+}

@@ -1,19 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import alunosFake from "../../data/Students";
 import "../../styles/personal/ProgressView.css";
 import BodySilhouette from "../../components/BodySilhouette.";
 
-const ALUNOS_POR_PAGINA = 20;
+const ALUNOS_POR_PAGINA = 5;
 
 export default function ProgressView() {
+  const [alunos, setAlunos] = useState([]);
   const [alunoSelecionado, setAlunoSelecionado] = useState(null);
   const [paginaAtual, setPaginaAtual] = useState(1);
   const navigate = useNavigate();
 
-  const totalPaginas = Math.ceil(alunosFake.length / ALUNOS_POR_PAGINA);
+  useEffect(() => {
+    const alunosSalvos = JSON.parse(localStorage.getItem("alunosFake"));
+    if (alunosSalvos) {
+      // Garantir que todos tenham medidasIniciais
+      const atualizados = alunosSalvos.map((aluno) => ({
+        ...aluno,
+        medidasIniciais: aluno.medidasIniciais || aluno.medidas,
+      }));
+      setAlunos(atualizados);
+      localStorage.setItem("alunosFake", JSON.stringify(atualizados));
+    } else {
+      setAlunos(alunosFake);
+    }
+  }, []);
 
-  const alunosPagina = alunosFake.slice(
+  const totalPaginas = Math.ceil(alunos.length / ALUNOS_POR_PAGINA);
+
+  const alunosPagina = alunos.slice(
     (paginaAtual - 1) * ALUNOS_POR_PAGINA,
     paginaAtual * ALUNOS_POR_PAGINA
   );
@@ -31,12 +47,19 @@ export default function ProgressView() {
     setPaginaAtual(numero);
   }
 
-  function calcularProgresso(medidas) {
-    if (!medidas) return 1;
-    const { peitoCm = 0, cinturaCm = 0, bracoCm = 0, coxaCm = 0 } = medidas;
-    const total = peitoCm + cinturaCm + bracoCm + coxaCm;
-    const media = total / 4;
-    return Math.min(Math.max(media / 100, 0.9), 1.8);
+  function calcularVariacao(inicial, atual) {
+    return inicial != null && atual != null ? atual - inicial : 0;
+  }
+
+  function calcularProgresso(medidasIniciais, medidasAtuais) {
+    if (!medidasIniciais || !medidasAtuais) return 1;
+    const { peitoCm: p1 = 0, cinturaCm: c1 = 0, bracoCm: b1 = 0, coxaCm: cx1 = 0 } = medidasIniciais;
+    const { peitoCm: p2 = 0, cinturaCm: c2 = 0, bracoCm: b2 = 0, coxaCm: cx2 = 0 } = medidasAtuais;
+    const totalInicial = p1 + c1 + b1 + cx1;
+    const totalAtual = p2 + c2 + b2 + cx2;
+    const mediaInicial = totalInicial / 4;
+    const mediaAtual = totalAtual / 4;
+    return Math.min(Math.max(mediaAtual / mediaInicial, 0.9), 1.8);
   }
 
   return (
@@ -91,25 +114,120 @@ export default function ProgressView() {
             role="dialog"
             aria-modal="true"
             aria-labelledby="modal-title"
+            style={{ display: "flex", flexDirection: "column" }}
           >
             <h3 id="modal-title">Progresso de {alunoSelecionado.nome}</h3>
 
-            <div className="progresso-container" style={{ display: "flex", gap: "40px", alignItems: "center" }}>
+            <div
+              className="progresso-container"
+              style={{ display: "flex", gap: "40px", alignItems: "flex-start" }}
+            >
               <BodySilhouette
                 sexo={alunoSelecionado.sexo}
-                progresso={calcularProgresso(alunoSelecionado.medidas)}
+                progresso={calcularProgresso(
+                  alunoSelecionado.medidasIniciais,
+                  alunoSelecionado.medidas
+                )}
               />
-              <div>
-                <h4>Medidas Alcançadas</h4>
-                <ul>
-                  <li>Braço: {alunoSelecionado.medidas?.bracoCm ?? "-"} cm</li>
-                  <li>Peito: {alunoSelecionado.medidas?.peitoCm ?? "-"} cm</li>
-                  <li>Cintura: {alunoSelecionado.medidas?.cinturaCm ?? "-"} cm</li>
-                  <li>Quadril: {alunoSelecionado.medidas?.quadrilCm ?? "-"} cm</li>
-                  <li>Glúteos: {alunoSelecionado.medidas?.gluteosCm ?? "-"} cm</li>
-                  <li>Coxas: {alunoSelecionado.medidas?.coxaCm ?? "-"} cm</li>
-                  <li>Panturrilha: {alunoSelecionado.medidas?.panturrilhaCm ?? "-"} cm</li>
-                </ul>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                <div>
+                  <h4>Medidas Iniciais</h4>
+                  <ul>
+                    <li>Braço: {alunoSelecionado.medidasIniciais?.bracoCm ?? "-"} cm</li>
+                    <li>Peito: {alunoSelecionado.medidasIniciais?.peitoCm ?? "-"} cm</li>
+                    <li>Cintura: {alunoSelecionado.medidasIniciais?.cinturaCm ?? "-"} cm</li>
+                    <li>Quadril: {alunoSelecionado.medidasIniciais?.quadrilCm ?? "-"} cm</li>
+                    <li>Glúteos: {alunoSelecionado.medidasIniciais?.gluteosCm ?? "-"} cm</li>
+                    <li>Coxas: {alunoSelecionado.medidasIniciais?.coxaCm ?? "-"} cm</li>
+                    <li>Panturrilha: {alunoSelecionado.medidasIniciais?.panturrilhaCm ?? "-"} cm</li>
+                    <li>Peso: {alunoSelecionado.medidasIniciais?.pesoKg ?? "-"} kg</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4>Medidas Alcançadas</h4>
+                  <ul>
+                    <li>Braço: {alunoSelecionado.medidas?.bracoCm ?? "-"} cm</li>
+                    <li>Peito: {alunoSelecionado.medidas?.peitoCm ?? "-"} cm</li>
+                    <li>Cintura: {alunoSelecionado.medidas?.cinturaCm ?? "-"} cm</li>
+                    <li>Quadril: {alunoSelecionado.medidas?.quadrilCm ?? "-"} cm</li>
+                    <li>Glúteos: {alunoSelecionado.medidas?.gluteosCm ?? "-"} cm</li>
+                    <li>Coxas: {alunoSelecionado.medidas?.coxaCm ?? "-"} cm</li>
+                    <li>Panturrilha: {alunoSelecionado.medidas?.panturrilhaCm ?? "-"} cm</li>
+                    <li>Peso: {alunoSelecionado.medidas?.pesoKg ?? "-"} kg</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4>Variação</h4>
+                  <ul>
+                    <li>
+                      Braço:{" "}
+                      {calcularVariacao(
+                        alunoSelecionado.medidasIniciais?.bracoCm,
+                        alunoSelecionado.medidas?.bracoCm
+                      )}{" "}
+                      cm
+                    </li>
+                    <li>
+                      Peito:{" "}
+                      {calcularVariacao(
+                        alunoSelecionado.medidasIniciais?.peitoCm,
+                        alunoSelecionado.medidas?.peitoCm
+                      )}{" "}
+                      cm
+                    </li>
+                    <li>
+                      Cintura:{" "}
+                      {calcularVariacao(
+                        alunoSelecionado.medidasIniciais?.cinturaCm,
+                        alunoSelecionado.medidas?.cinturaCm
+                      )}{" "}
+                      cm
+                    </li>
+                    <li>
+                      Quadril:{" "}
+                      {calcularVariacao(
+                        alunoSelecionado.medidasIniciais?.quadrilCm,
+                        alunoSelecionado.medidas?.quadrilCm
+                      )}{" "}
+                      cm
+                    </li>
+                    <li>
+                      Glúteos:{" "}
+                      {calcularVariacao(
+                        alunoSelecionado.medidasIniciais?.gluteosCm,
+                        alunoSelecionado.medidas?.gluteosCm
+                      )}{" "}
+                      cm
+                    </li>
+                    <li>
+                      Coxas:{" "}
+                      {calcularVariacao(
+                        alunoSelecionado.medidasIniciais?.coxaCm,
+                        alunoSelecionado.medidas?.coxaCm
+                      )}{" "}
+                      cm
+                    </li>
+                    <li>
+                      Panturrilha:{" "}
+                      {calcularVariacao(
+                        alunoSelecionado.medidasIniciais?.panturrilhaCm,
+                        alunoSelecionado.medidas?.panturrilhaCm
+                      )}{" "}
+                      cm
+                    </li>
+                    <li>
+                      Peso:{" "}
+                      {calcularVariacao(
+                        alunoSelecionado.medidasIniciais?.pesoKg,
+                        alunoSelecionado.medidas?.pesoKg
+                      )}{" "}
+                      kg
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
 

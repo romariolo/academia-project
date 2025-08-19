@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import alunosFake from "../../data/Students";
+import { getAlunos } from "../../data/Students"; // IMPORTAR FUNÇÃO, NÃO O ARRAY
 import "../../styles/personal/StudentsList.css";
 
 export default function StudentsList() {
@@ -10,9 +10,15 @@ export default function StudentsList() {
   const [filtroFinanceiro, setFiltroFinanceiro] = useState("todos");
   const [filtroTreino, setFiltroTreino] = useState("todos");
   const [paginaAtual, setPaginaAtual] = useState(1);
+  const [alunos, setAlunos] = useState([]);
+
+  // Pegar alunos do localStorage ao carregar
+  useEffect(() => {
+    setAlunos(getAlunos());
+  }, []);
 
   const alunosFiltrados = useMemo(() => {
-    let filtrados = [...alunosFake];
+    let filtrados = [...alunos];
 
     // Filtro financeiro
     if (filtroFinanceiro === "pagos") {
@@ -34,7 +40,7 @@ export default function StudentsList() {
     );
 
     return filtrados;
-  }, [filtroFinanceiro, filtroTreino]);
+  }, [filtroFinanceiro, filtroTreino, alunos]);
 
   const totalPaginas = Math.ceil(alunosFiltrados.length / alunosPorPagina) || 1;
 
@@ -112,6 +118,13 @@ export default function StudentsList() {
                   ? "Treino cadastrado"
                   : "Sem treino cadastrado"}
               </span>
+
+              <button
+                className="btn-treino"
+                onClick={() => navigate(`/personal/create-workout?id=${aluno.id}`)}
+              >
+                ➕ Criar/Editar Treino
+              </button>
             </li>
           ))
         )}
