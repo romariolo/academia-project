@@ -23,6 +23,11 @@ function LoginPage() {
       email: 'admin@email.com',
       password: 'a123456',
       role: 'admin'
+    },
+    {
+      email: 'nutricionista@email.com',
+      password: 'a123456',
+      role: 'nutricionist'
     }
   ];
 
