@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BodySilhouette from "../../components/BodySilhouette.";
 import { getAlunoById, salvarAluno } from "../../data/Students";
+import SelectPersonal from "../../pages/personal/SelectPersonal";
 import "../../styles/student/StudentDashboard.css";
 
 export default function StudentDashboard() {
@@ -10,6 +11,7 @@ export default function StudentDashboard() {
   const [menuAberto, setMenuAberto] = useState(false);
   const [diaSelecionado, setDiaSelecionado] = useState("");
   const [opcoesDiasTreino, setOpcoesDiasTreino] = useState([]);
+  const [modalPersonalAberto, setModalPersonalAberto] = useState(false);
   const navigate = useNavigate();
   const ordemDias = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
 
@@ -34,10 +36,12 @@ export default function StudentDashboard() {
     });
     const diasTreinoDisponiveis = Array.from(
       new Set(
-        (treinoLista || []).map((t) => {
-          const d = t.dia || t.diaSemana || "";
-          return String(d).split("-")[0].split(" ")[0];
-        }).filter(Boolean)
+        (treinoLista || [])
+          .map((t) => {
+            const d = t.dia || t.diaSemana || "";
+            return String(d).split("-")[0].split(" ")[0];
+          })
+          .filter(Boolean)
       )
     );
     setOpcoesDiasTreino(diasTreinoDisponiveis);
@@ -60,15 +64,35 @@ export default function StudentDashboard() {
 
   function handleChange(e, campo, tipo) {
     let valor = e.target.value;
-    if (campo === "cpf") valor = valor.replace(/\D/g, "").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d{1,2})$/, "$1-$2").slice(0, 14);
-    if (campo === "whatsapp") valor = valor.replace(/\D/g, "").replace(/^(\d{2})(\d)/g, "$1 $2").replace(/(\d{1})(\d{4})(\d{4})$/, "$1 $2-$3").slice(0, 13);
-    if (campo === "cep") valor = valor.replace(/\D/g, "").replace(/^(\d{2})(\d{3})(\d)/, "$1.$2-$3").slice(0, 10);
-    setAluno(prev => ({ ...prev, [tipo]: { ...prev[tipo], [campo]: valor } }));
+    if (campo === "cpf")
+      valor = valor.replace(/\D/g, "")
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d{1,2})$/, "$1-$2")
+        .slice(0, 14);
+    if (campo === "whatsapp")
+      valor = valor.replace(/\D/g, "")
+        .replace(/^(\d{2})(\d)/g, "$1 $2")
+        .replace(/(\d{1})(\d{4})(\d{4})$/, "$1 $2-$3")
+        .slice(0, 13);
+    if (campo === "cep")
+      valor = valor.replace(/\D/g, "")
+        .replace(/^(\d{2})(\d{3})(\d)/, "$1.$2-$3")
+        .slice(0, 10);
+
+    setAluno((prev) => ({ ...prev, [tipo]: { ...prev[tipo], [campo]: valor } }));
+
     if (campo === "cep" && valor.length === 10) {
       const cepNumeros = valor.replace(/\D/g, "");
-      fetch(`https://viacep.com.br/ws/${cepNumeros}/json/`).then(res => res.json()).then(data => {
-        if (!data.erro) setAluno(prev => ({ ...prev, perfil: { ...prev.perfil, cidade: data.localidade, estado: data.uf } }));
-      });
+      fetch(`https://viacep.com.br/ws/${cepNumeros}/json/`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (!data.erro)
+            setAluno((prev) => ({
+              ...prev,
+              perfil: { ...prev.perfil, cidade: data.localidade, estado: data.uf },
+            }));
+        });
     }
   }
 
@@ -83,11 +107,13 @@ export default function StudentDashboard() {
   }
 
   function calcularVariacao(campo) {
-    const toNumber = v => parseFloat((v || "0").toString().replace(",", "."));
+    const toNumber = (v) => parseFloat((v || "0").toString().replace(",", "."));
     const atual = toNumber(aluno.medidas[campo]);
     const inicial = toNumber(aluno.medidasIniciais[campo]);
     const diff = atual - inicial;
-    return diff.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace(".", ",");
+    return diff
+      .toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      .replace(".", ",");
   }
 
   function handleLogout() {
@@ -130,11 +156,13 @@ export default function StudentDashboard() {
     { key: "confirmarSenha", label: "Confirmar Senha", tipo: "password" },
   ];
 
-  const treinosPorDia = ordemDias.map(dia => ({
+  const treinosPorDia = ordemDias.map((dia) => ({
     dia,
-    treinos: (aluno.treino || []).filter(t => normalizeDia(t) === dia)
+    treinos: (aluno.treino || []).filter((t) => normalizeDia(t) === dia),
   }));
-  const treinosFiltrados = (aluno.treino || []).filter(t => normalizeDia(t) === diaSelecionado);
+  const treinosFiltrados = (aluno.treino || []).filter(
+    (t) => normalizeDia(t) === diaSelecionado
+  );
 
   return (
     <div className="student-dashboard-container">
@@ -145,6 +173,7 @@ export default function StudentDashboard() {
         <button className={abaAtiva === "atuais" ? "active" : ""} onClick={() => setAbaAtiva("atuais")}>Medidas Atuais</button>
         <button className={abaAtiva === "variacao" ? "active" : ""} onClick={() => setAbaAtiva("variacao")}>Variação</button>
         <button className={abaAtiva === "meusTreinos" ? "active" : ""} onClick={() => setAbaAtiva("meusTreinos")}>Meus Treinos</button>
+        <button className="btn-personal" onClick={() => setModalPersonalAberto(true)}>Escolher Personal</button>
         <button className="btn-logout" onClick={handleLogout}>Sair</button>
       </div>
 
@@ -261,6 +290,15 @@ export default function StudentDashboard() {
                 </ul>
               )
             )}
+          </div>
+        )}
+
+        {modalPersonalAberto && (
+          <div className="modal-overlay" onClick={() => setModalPersonalAberto(false)}>
+            <div className="modal-content" onClick={e => e.stopPropagation()}>
+              <button className="modal-close" onClick={() => setModalPersonalAberto(false)}>X</button>
+              <SelectPersonal alunoId={aluno.id} onSelect={() => setModalPersonalAberto(false)} />
+            </div>
           </div>
         )}
       </div>

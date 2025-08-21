@@ -12,7 +12,7 @@ function LoginPage() {
     { email: 'personal@email.com', password: 'a123456', role: 'personal' },
     { email: 'aluno@email.com', password: 'a123456', role: 'aluno' },
     { email: 'admin@email.com', password: 'a123456', role: 'admin' },
-    { email: 'nutricionista@email.com', password: 'a123456', role: 'nutricionist' }
+    { email: 'nutricionista@email.com', password: 'a123456', role: 'nutricionista' }
   ];
 
   const handleSubmit = (e) => {
@@ -20,6 +20,9 @@ function LoginPage() {
     const userFound = fakeUsers.find(u => u.email === username && u.password === password);
 
     if (userFound) {
+      localStorage.setItem('userToken', 'fake-jwt-token');
+      localStorage.setItem('usuarioLogado', JSON.stringify(userFound));
+
       if (userFound.role === 'personal') {
         navigate('/personal/dashboard');
       } else if (userFound.role === 'aluno') {
@@ -27,6 +30,10 @@ function LoginPage() {
         const aluno = alunos.find(a => a.id === 1);
         localStorage.setItem('usuarioLogado', JSON.stringify(aluno));
         navigate('/student/dashboard');
+      } else if (userFound.role === 'admin') {
+        navigate('/admin/dashboard');
+      } else if (userFound.role === 'nutricionista') {
+        navigate('/nutricionista/dashboard');
       }
     } else {
       alert('Usuário ou senha inválidos!');
