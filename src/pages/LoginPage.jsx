@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import getAlunos from '../data/Students';
 import '../styles/LoginPage.css';
 
 function LoginPage() {
@@ -7,14 +8,27 @@ function LoginPage() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  // Usuários fake
   const fakeUsers = [
     {
       email: 'personal@email.com',
       password: 'a123456',
       role: 'personal'
     },
-    // você pode adicionar mais usuários aqui futuramente
+    {
+      email: 'aluno@email.com',
+      password: 'a123456',
+      role: 'aluno'
+    },
+    {
+      email: 'admin@email.com',
+      password: 'a123456',
+      role: 'admin'
+    },
+    {
+      email: 'nutricionista@email.com',
+      password: 'a123456',
+      role: 'nutricionist'
+    }
   ];
 
   const handleSubmit = (e) => {
@@ -25,11 +39,14 @@ function LoginPage() {
     );
 
     if (userFound) {
-      alert(`Bem-vindo, ${userFound.role}!`);
       if (userFound.role === 'personal') {
         navigate('/personal/dashboard');
+      } else if (userFound.role === 'aluno') {
+        const alunos = getAlunos(); 
+        const aluno = alunos.find(a => a.id === 2);
+        localStorage.setItem('usuarioLogado', JSON.stringify(aluno));
+        navigate('/student/dashboard');
       }
-      // Aqui futuramente dá pra colocar redirecionamento para outros roles
     } else {
       alert('Usuário ou senha inválidos!');
     }
