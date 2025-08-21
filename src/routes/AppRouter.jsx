@@ -10,6 +10,7 @@ import EditWorkout from '../pages/personal/EditWorkout.jsx';
 import ProgressView from '../pages/personal/ProgressView.jsx';
 
 import StudentDashboard from '../pages/student/StudentDashboard.jsx';
+import PrivateRoute from './PrivateRoute.jsx';
 
 function AppRouter() {
   return (
@@ -19,13 +20,25 @@ function AppRouter() {
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
-      <Route path="/personal/dashboard" element={<PersonalDashboard />} />
-      <Route path="/personal/students" element={<StudentsList />} />
-      <Route path="/personal/create-workout" element={<CreateWorkout />} />
-      <Route path="/personal/edit-workout/:id" element={<EditWorkout />} />
-      <Route path="/personal/progress/:id" element={<ProgressView />} />
+      <Route path="/personal/dashboard" element={
+        <PrivateRoute><PersonalDashboard /></PrivateRoute>
+      } />
+      <Route path="/personal/students" element={
+        <PrivateRoute><StudentsList /></PrivateRoute>
+      } />
+      <Route path="/personal/create-workout" element={
+        <PrivateRoute><CreateWorkout /></PrivateRoute>
+      } />
+      <Route path="/personal/edit-workout/:id" element={
+        <PrivateRoute><EditWorkout /></PrivateRoute>
+      } />
+      <Route path="/personal/progress/:id" element={
+        <PrivateRoute><ProgressView /></PrivateRoute>
+      } />
 
-      <Route path="/student/dashboard" element={<StudentDashboard />} />
+      <Route path="/student/dashboard" element={
+        <PrivateRoute><StudentDashboard /></PrivateRoute>
+      } />
     </Routes>
   );
 }
