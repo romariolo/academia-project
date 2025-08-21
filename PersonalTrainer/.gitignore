@@ -7,12 +7,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Dependências
 node_modules
-backend/node_modules
-PersonalTrainer/node_modules
-
-# Build
 dist
 dist-ssr
 *.local
