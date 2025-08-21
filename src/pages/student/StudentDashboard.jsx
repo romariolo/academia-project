@@ -11,14 +11,15 @@ export default function StudentDashboard() {
   const [diaSelecionado, setDiaSelecionado] = useState("");
   const navigate = useNavigate();
 
+  const ordemDias = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
+
   useEffect(() => {
     const usuarioLogado = JSON.parse(localStorage.getItem("usuarioLogado"));
     if (!usuarioLogado) {
       navigate("/login");
       return;
     }
-    const alunoEncontrado =
-      getAlunoById(usuarioLogado.id) || getAlunoById(usuarioLogado.email);
+    const alunoEncontrado = getAlunoById(usuarioLogado.id);
     if (!alunoEncontrado) {
       navigate("/login");
       return;
@@ -49,77 +50,34 @@ export default function StudentDashboard() {
 
   function handleChange(e, campo, tipo) {
     let valor = e.target.value;
-
-    if (campo === "cpf") {
-      valor = valor.replace(/\D/g, "")
-        .replace(/(\d{3})(\d)/, "$1.$2")
-        .replace(/(\d{3})(\d)/, "$1.$2")
-        .replace(/(\d{3})(\d{1,2})$/, "$1-$2")
-        .slice(0, 14);
-    }
-
-    if (campo === "whatsapp") {
-      valor = valor
-        .replace(/\D/g, "")
-        .replace(/^(\d{2})(\d)/g, "$1 $2")
-        .replace(/(\d{1})(\d{4})(\d{4})$/, "$1 $2-$3")
-        .slice(0, 13);
-    }
-
-    if (campo === "cep") {
-      valor = valor
-        .replace(/\D/g, "")
-        .replace(/^(\d{2})(\d{3})(\d)/, "$1.$2-$3")
-        .slice(0, 10);
-    }
-
-    setAluno((prev) => ({
-      ...prev,
-      [tipo]: { ...prev[tipo], [campo]: valor },
-    }));
-
+    if (campo === "cpf") valor = valor.replace(/\D/g, "").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d{1,2})$/, "$1-$2").slice(0, 14);
+    if (campo === "whatsapp") valor = valor.replace(/\D/g, "").replace(/^(\d{2})(\d)/g, "$1 $2").replace(/(\d{1})(\d{4})(\d{4})$/, "$1 $2-$3").slice(0, 13);
+    if (campo === "cep") valor = valor.replace(/\D/g, "").replace(/^(\d{2})(\d{3})(\d)/, "$1.$2-$3").slice(0, 10);
+    setAluno(prev => ({ ...prev, [tipo]: { ...prev[tipo], [campo]: valor } }));
     if (campo === "cep" && valor.length === 10) {
       const cepNumeros = valor.replace(/\D/g, "");
-      fetch(`https://viacep.com.br/ws/${cepNumeros}/json/`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (!data.erro) {
-            setAluno((prev) => ({
-              ...prev,
-              perfil: {
-                ...prev.perfil,
-                cidade: data.localidade,
-                estado: data.uf,
-              },
-            }));
-          }
-        });
+      fetch(`https://viacep.com.br/ws/${cepNumeros}/json/`).then(res => res.json()).then(data => {
+        if (!data.erro) setAluno(prev => ({ ...prev, perfil: { ...prev.perfil, cidade: data.localidade, estado: data.uf } }));
+      });
     }
   }
 
   function salvar(tipo) {
     if (!aluno) return;
-
     if (tipo === "perfil" && aluno.perfil.cpf && !validarCPF(aluno.perfil.cpf)) {
       alert("CPF inválido!");
       return;
     }
-
     salvarAluno(aluno);
-    alert(`${tipo === "perfil" ? "Perfil" : "Medidas/ Treinos"} salvos!`);
+    alert(`${tipo === "perfil" ? "Perfil" : "Medidas/Treinos"} salvos!`);
   }
 
   function calcularVariacao(campo) {
-    const toNumber = (v) => {
-      const s = v !== undefined && v !== null ? String(v) : "0";
-      return parseFloat(s.replace(",", ".") || "0");
-    };
+    const toNumber = v => parseFloat((v || "0").toString().replace(",", "."));
     const atual = toNumber(aluno.medidas[campo]);
     const inicial = toNumber(aluno.medidasIniciais[campo]);
     const diff = atual - inicial;
-    return diff
-      .toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-      .replace(".", ",");
+    return diff.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace(".", ",");
   }
 
   function handleLogout() {
@@ -157,16 +115,11 @@ export default function StudentDashboard() {
     { key: "confirmarSenha", label: "Confirmar Senha", tipo: "password" },
   ];
 
-  const ordemDias = ["Segunda-feira","Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira","Sábado","Domingo"];
-
-  const treinosPorDia = ordemDias.map((dia) => ({
+  const treinosPorDia = ordemDias.map(dia => ({
     dia,
-    treinos: aluno.treino.filter((t) => t.diaSemana === dia),
+    treinos: aluno.treino.filter(t => t.dia === dia)
   }));
-
-  const treinosFiltrados = diaSelecionado
-    ? treinosPorDia.find((d) => d.dia === diaSelecionado)?.treinos || []
-    : treinosPorDia;
+  const treinosFiltrados = aluno.treino.filter(t => t.dia === diaSelecionado);
 
   return (
     <div className="student-dashboard-container">
@@ -174,7 +127,7 @@ export default function StudentDashboard() {
         <h2>{`${aluno.perfil.primeiroNome || ""} ${aluno.perfil.sobrenome || ""}`}</h2>
         <button className={abaAtiva === "perfil" ? "active" : ""} onClick={() => setAbaAtiva("perfil")}>Perfil</button>
         <button className={abaAtiva === "iniciais" ? "active" : ""} onClick={() => setAbaAtiva("iniciais")}>Medidas Iniciais</button>
-        <button className={abaAtiva === "atuais" ? "active" : ""} onClick={() => setAbaAtiva("atuais")}>Medidas Finais</button>
+        <button className={abaAtiva === "atuais" ? "active" : ""} onClick={() => setAbaAtiva("atuais")}>Medidas Atuais</button>
         <button className={abaAtiva === "variacao" ? "active" : ""} onClick={() => setAbaAtiva("variacao")}>Variação</button>
         <button className={abaAtiva === "meusTreinos" ? "active" : ""} onClick={() => setAbaAtiva("meusTreinos")}>Meus Treinos</button>
         <button className="btn-logout" onClick={handleLogout}>Sair</button>

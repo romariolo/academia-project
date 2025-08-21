@@ -1,30 +1,29 @@
 .students-list {
   max-width: 600px;
   margin: 2rem auto;
-  padding: 1.5rem; /* diminuído de 2rem para reduzir altura */
+  padding: 1.5rem;
   background: #fafafa;
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   display: flex;
   flex-direction: column;
-  height: auto; /* garante que se ajuste ao conteúdo */
+  height: auto;
 }
 
 .students-list h1 {
   text-align: center;
-  margin-bottom: 1.2rem; /* diminuído de 1.5rem */
+  margin-bottom: 1.2rem;
   color: #222;
   font-weight: 700;
-  font-size: 1.8rem; /* levemente reduzido */
+  font-size: 1.8rem;
   flex-shrink: 0;
 }
 
-/* Container para os filtros */
 .filtros-wrapper {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.8rem; /* menor para economizar espaço */
+  gap: 0.8rem;
   margin-bottom: 1.2rem;
 }
 
@@ -44,7 +43,7 @@
 
 .filtro-container select {
   flex: 1;
-  padding: 0.35rem 0.7rem; /* padding reduzido */
+  padding: 0.35rem 0.7rem;
   border: 1.8px solid #ccc;
   border-radius: 8px;
   font-size: 1rem;
@@ -61,14 +60,14 @@
 .students-list ul {
   list-style: none;
   padding: 0;
-  margin: 0 0 1.2rem 0; /* reduzido */
+  margin: 0 0 1.2rem 0;
 }
 
 .students-list li {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.7rem 1rem; /* reduzido */
+  padding: 0.7rem 1rem;
   margin-bottom: 0.6rem;
   background: #fff;
   border-radius: 10px;
@@ -89,44 +88,26 @@
   font-size: 1.05rem;
 }
 
-.situacao-financeira {
-  font-weight: 700;
-  padding: 0.25rem 0.8rem;
-  border-radius: 16px;
-  font-size: 0.9rem;
-  user-select: none;
+.situacao-treino {
   margin-left: 10px;
-  min-width: 85px;
-  text-align: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  transition: background-color 0.3s ease;
+  padding: 3px 7px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  font-weight: 700;
 }
 
-.situacao-financeira.pago {
+.treino-ok {
   background-color: #27ae60;
   color: #fff;
 }
 
-.situacao-financeira.nao-pago {
+.treino-faltando {
   background-color: #e74c3c;
   color: #fff;
-}
-
-.situacao-treino {
-  margin-left: 10px;
-  padding: 3px 7px; /* menor */
-  border-radius: 5px;
-  font-size: 0.85rem;
-}
-
-.treino-ok {
-  background-color: #c8f7c5;
-  color: #2e7d32;
-}
-
-.treino-faltando {
-  background-color: #ffcdd2;
-  color: #c62828;
 }
 
 .paginacao {
@@ -172,11 +153,11 @@
   cursor: pointer;
   margin-top: auto;
   user-select: none;
-  transition: color 0.3s ease;
   display: block;
   margin-left: auto;
   margin-right: auto;
   padding: 0.1rem 0;
+  transition: color 0.3s ease;
 }
 
 .voltar-btn:hover {
@@ -185,7 +166,7 @@
 
 .nenhum-aluno {
   text-align: center;
-  padding: 1rem; /* menor */
+  padding: 1rem;
   color: #777;
   font-style: italic;
 }

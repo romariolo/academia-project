@@ -1,5 +1,3 @@
-// src/data/Students.js
-
 function gerarMedidasBase() {
   const base = {
     bracoCm: 32,
@@ -9,10 +7,9 @@ function gerarMedidasBase() {
     gluteosCm: 120,
     coxaCm: 90,
     panturrilhaCm: 40,
-    pesoKg: 70,
+    pesoKg: 70
   };
   const fator = 0.85 + Math.random() * 0.3;
-
   return {
     bracoCm: Math.round(base.bracoCm * fator),
     peitoCm: Math.round(base.peitoCm * fator),
@@ -21,7 +18,7 @@ function gerarMedidasBase() {
     gluteosCm: Math.round(base.gluteosCm * fator),
     coxaCm: Math.round(base.coxaCm * fator),
     panturrilhaCm: Math.round(base.panturrilhaCm * fator),
-    pesoKg: Math.round(base.pesoKg * fator),
+    pesoKg: Math.round(base.pesoKg * fator)
   };
 }
 
@@ -39,6 +36,7 @@ const perfilBase = {
   confirmarEmail: "",
   senha: "",
   confirmarSenha: "",
+  whatsapp: ""
 };
 
 let alunosFake = [
@@ -51,7 +49,7 @@ let alunosFake = [
   { id: 7, nome: "Ramiro Rodrigues", treinoCadastrado: false, mensalidadePaga: true, sexo: "Masculino", medidasIniciais: gerarMedidasBase(), medidas: gerarMedidasBase(), treino: [], perfil: { ...perfilBase } },
   { id: 8, nome: "Lucas Almeida", treinoCadastrado: false, mensalidadePaga: false, sexo: "Masculino", medidasIniciais: gerarMedidasBase(), medidas: gerarMedidasBase(), treino: [], perfil: { ...perfilBase } },
   { id: 9, nome: "Fernanda Costa", treinoCadastrado: false, mensalidadePaga: true, sexo: "Feminino", medidasIniciais: gerarMedidasBase(), medidas: gerarMedidasBase(), treino: [], perfil: { ...perfilBase } },
-  { id: 10, nome: "Bruno Martins", treinoCadastrado: false, mensalidadePaga: false, sexo: "Masculino", medidasIniciais: gerarMedidasBase(), medidas: gerarMedidasBase(), treino: [], perfil: { ...perfilBase } },
+  { id: 10, nome: "Bruno Martins", treinoCadastrado: false, mensalidadePaga: true, sexo: "Masculino", medidasIniciais: gerarMedidasBase(), medidas: gerarMedidasBase(), treino: [], perfil: { ...perfilBase } },
   { id: 11, nome: "Clara Ribeiro", treinoCadastrado: false, mensalidadePaga: true, sexo: "Feminino", medidasIniciais: gerarMedidasBase(), medidas: gerarMedidasBase(), treino: [], perfil: { ...perfilBase } },
   { id: 12, nome: "Diego Lopes", treinoCadastrado: false, mensalidadePaga: true, sexo: "Masculino", medidasIniciais: gerarMedidasBase(), medidas: gerarMedidasBase(), treino: [], perfil: { ...perfilBase } },
   { id: 13, nome: "Ana Beatriz", treinoCadastrado: false, mensalidadePaga: true, sexo: "Feminino", medidasIniciais: gerarMedidasBase(), medidas: gerarMedidasBase(), treino: [], perfil: { ...perfilBase } },
@@ -60,17 +58,17 @@ let alunosFake = [
   { id: 16, nome: "Carlos Eduardo", treinoCadastrado: false, mensalidadePaga: false, sexo: "Masculino", medidasIniciais: gerarMedidasBase(), medidas: gerarMedidasBase(), treino: [], perfil: { ...perfilBase } },
   { id: 17, nome: "Patrícia Gomes", treinoCadastrado: false, mensalidadePaga: true, sexo: "Feminino", medidasIniciais: gerarMedidasBase(), medidas: gerarMedidasBase(), treino: [], perfil: { ...perfilBase } },
   { id: 18, nome: "André Souza", treinoCadastrado: false, mensalidadePaga: false, sexo: "Masculino", medidasIniciais: gerarMedidasBase(), medidas: gerarMedidasBase(), treino: [], perfil: { ...perfilBase } },
-  { id: 19, nome: "Larissa Rocha", treinoCadastrado: false, mensalidadePaga: true, sexo: "Feminino", medidasIniciais: gerarMedidasBase(), medidas: gerarMedidasBase(), treino: [], perfil: { ...perfilBase } },
-  { id: 20, nome: "Gustavo Ferreira", treinoCadastrado: false, mensalidadePaga: true, sexo: "Masculino", medidasIniciais: gerarMedidasBase(), medidas: gerarMedidasBase(), treino: [], perfil: { ...perfilBase } },
+  { id: 19, nome: "Larissa Rocha", treinoCadastrado: false, mensalidadePaga: true, sexo: "Feminino", medidasIniciais: gerarMedidasBase(), medidas: gerarMedidasBase(), treino: [], perfil: { ...perfilBase } }
 ];
 
-// 🔹 Funções de persistência (simulando BD)
+const STORAGE_KEY = "alunosFake";
+
 export function getAlunos() {
-  const alunosSalvos = JSON.parse(localStorage.getItem("alunosFake"));
-  if (alunosSalvos) {
-    alunosFake = alunosSalvos;
+  const storage = JSON.parse(localStorage.getItem(STORAGE_KEY));
+  if (storage && storage.length) {
+    alunosFake = storage;
   } else {
-    localStorage.setItem("alunosFake", JSON.stringify(alunosFake));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(alunosFake));
   }
   return alunosFake;
 }
@@ -80,17 +78,15 @@ export function getAlunoById(id) {
   return alunos.find((a) => a.id === id) || null;
 }
 
-export function salvarAluno(aluno) {
-  const alunos = getAlunos();
-  const index = alunos.findIndex((a) => a.id === aluno.id);
-
+export function salvarAluno(alunoAtualizado) {
+  const alunos = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+  const index = alunos.findIndex((a) => a.id === alunoAtualizado.id);
   if (index >= 0) {
-    alunos[index] = aluno;
+    alunos[index] = { ...alunos[index], ...alunoAtualizado };
   } else {
-    alunos.push(aluno);
+    alunos.push(alunoAtualizado);
   }
-
-  localStorage.setItem("alunosFake", JSON.stringify(alunos));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(alunos));
 }
 
-export default getAlunos;
+export { alunosFake as default };

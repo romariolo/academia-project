@@ -18,6 +18,11 @@ function LoginPage() {
       email: 'aluno@email.com',
       password: 'a123456',
       role: 'aluno'
+    },
+    {
+      email: 'admin@email.com',
+      password: 'a123456',
+      role: 'admin'
     }
   ];
 
@@ -33,7 +38,7 @@ function LoginPage() {
         navigate('/personal/dashboard');
       } else if (userFound.role === 'aluno') {
         const alunos = getAlunos(); 
-        const aluno = alunos.find(a => a.id === 1);
+        const aluno = alunos.find(a => a.id === 2);
         localStorage.setItem('usuarioLogado', JSON.stringify(aluno));
         navigate('/student/dashboard');
       }
