@@ -64,23 +64,22 @@ let alunosFake = [
 const STORAGE_KEY = "alunosFake";
 
 export function getAlunos() {
-  const storage = JSON.parse(localStorage.getItem(STORAGE_KEY));
-  if (storage && storage.length) {
-    alunosFake = storage;
-  } else {
+  let storage = JSON.parse(localStorage.getItem(STORAGE_KEY));
+  if (!storage || !storage.length) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(alunosFake));
+    storage = alunosFake;
   }
-  return alunosFake;
+  return storage;
 }
 
 export function getAlunoById(id) {
   const alunos = getAlunos();
-  return alunos.find((a) => a.id === id) || null;
+  return alunos.find(a => a.id === id) || null;
 }
 
 export function salvarAluno(alunoAtualizado) {
   const alunos = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-  const index = alunos.findIndex((a) => a.id === alunoAtualizado.id);
+  const index = alunos.findIndex(a => a.id === alunoAtualizado.id);
   if (index >= 0) {
     alunos[index] = { ...alunos[index], ...alunoAtualizado };
   } else {
@@ -89,4 +88,4 @@ export function salvarAluno(alunoAtualizado) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(alunos));
 }
 
-export { alunosFake as default };
+export default alunosFake;

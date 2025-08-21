@@ -1,15 +1,15 @@
 import { Route, Routes, Navigate } from 'react-router-dom';
-import LoginPage from '../pages/LoginPage';
-import RegisterPage from '../pages/RegisterPage';
-import ForgotPasswordPage from '../pages/ForgotPasswordPage';
+import LoginPage from '../pages/LoginPage.jsx';
+import RegisterPage from '../pages/RegisterPage.jsx';
+import ForgotPasswordPage from '../pages/ForgotPasswordPage.jsx';
 
-import PersonalDashboard from '../pages/personal/PersonalDashboard';
-import StudentsList from '../pages/personal/StudentsList';
-import CreateWorkout from '../pages/personal/CreateWorkout';
-import EditWorkout from '../pages/personal/EditWorkout';
-import ProgressView from '../pages/personal/ProgressView';
+import PersonalDashboard from '../pages/personal/PersonalDashboard.jsx';
+import StudentsList from '../pages/personal/StudentsList.jsx';
+import CreateWorkout from '../pages/personal/CreateWorkout.jsx';
+import EditWorkout from '../pages/personal/EditWorkout.jsx';
+import ProgressView from '../pages/personal/ProgressView.jsx';
 
-import StudentDashboard from '../pages/student/StudentDashboard';
+import StudentDashboard from '../pages/student/StudentDashboard.jsx';
 
 function AppRouter() {
   return (

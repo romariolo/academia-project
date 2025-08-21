@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { getAlunos, salvarAluno } from '../../data/Students';
 import '../../styles/personal/CreateWorkout.css';
 
 export default function CreateWorkout() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [modalAberto, setModalAberto] = useState(false);
   const [alunoSelecionado, setAlunoSelecionado] = useState(null);
   const [videoOption, setVideoOption] = useState('');
@@ -17,8 +18,7 @@ export default function CreateWorkout() {
   const [exercicios, setExercicios] = useState([]);
   const [editandoIndex, setEditandoIndex] = useState(null);
 
-  const alunosFake = getAlunos();
-
+  const alunos = getAlunos();
   const diasDaSemana = [
     'Segunda-feira',
     'Terça-feira',
@@ -28,6 +28,16 @@ export default function CreateWorkout() {
     'Sábado',
     'Domingo'
   ];
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const id = Number(params.get('id'));
+    if (id) {
+      const aluno = alunos.find(a => a.id === id);
+      if (aluno) abrirModal(aluno);
+      else alert('Aluno não encontrado.');
+    }
+  }, [location.search]);
 
   function abrirModal(aluno) {
     setAlunoSelecionado(aluno);
@@ -79,7 +89,7 @@ export default function CreateWorkout() {
       copia[editandoIndex] = novoExercicio;
       setExercicios(copia);
     } else {
-      setExercicios((prev) => [...prev, novoExercicio]);
+      setExercicios(prev => [...prev, novoExercicio]);
     }
 
     limparCampos();
@@ -113,7 +123,6 @@ export default function CreateWorkout() {
     setAlunoSelecionado(alunoAtualizado);
 
     if (editandoIndex === index) limparCampos();
-
     alert("Exercício excluído com sucesso!");
   }
 
@@ -153,24 +162,18 @@ export default function CreateWorkout() {
         id="select-aluno"
         onChange={(e) => {
           const id = Number(e.target.value);
-          const aluno = alunosFake.find((a) => a.id === id);
+          const aluno = alunos.find(a => a.id === id);
           if (aluno) abrirModal(aluno);
         }}
         defaultValue=""
       >
-        <option value="" disabled>
-          -- Escolha um aluno --
-        </option>
-        {alunosFake.map((aluno) => (
-          <option key={aluno.id} value={aluno.id}>
-            {aluno.nome}
-          </option>
+        <option value="" disabled>-- Escolha um aluno --</option>
+        {alunos.map(aluno => (
+          <option key={aluno.id} value={aluno.id}>{aluno.nome}</option>
         ))}
       </select>
 
-      <button className="voltar-btn" onClick={() => navigate(-1)}>
-        ← Voltar
-      </button>
+      <button className="voltar-btn" onClick={() => navigate(-1)}>← Voltar</button>
 
       {modalAberto && (
         <div className="modal-overlay" onClick={fecharModal}>
@@ -182,9 +185,7 @@ export default function CreateWorkout() {
               <select value={diaSemana} onChange={(e) => setDiaSemana(e.target.value)}>
                 <option value="">-- Escolha o dia --</option>
                 {diasDaSemana.map((dia, idx) => (
-                  <option key={idx} value={dia}>
-                    {dia}
-                  </option>
+                  <option key={idx} value={dia}>{dia}</option>
                 ))}
               </select>
             </label>
@@ -211,13 +212,7 @@ export default function CreateWorkout() {
 
             <label>
               Tipo de Vídeo:
-              <select
-                value={videoOption}
-                onChange={(e) => {
-                  setVideoOption(e.target.value);
-                  setVideoURL('');
-                }}
-              >
+              <select value={videoOption} onChange={(e) => { setVideoOption(e.target.value); setVideoURL(''); }}>
                 <option value="">-- Selecione --</option>
                 <option value="link">Link do YouTube</option>
                 <option value="arquivo">Arquivo de Vídeo</option>
@@ -239,18 +234,14 @@ export default function CreateWorkout() {
             )}
 
             {videoURL && (
-              <button className="video-btn" onClick={() => window.open(videoURL, '_blank')}>
-                ▶️ Visualizar Vídeo
-              </button>
+              <button className="video-btn" onClick={() => window.open(videoURL, '_blank')}>▶️ Visualizar Vídeo</button>
             )}
 
             <button className="add-btn" onClick={adicionarOuEditarExercicio}>
               {editandoIndex !== null ? '✏️ Atualizar Exercício' : '➕ Adicionar Exercício'}
             </button>
 
-            <button className="add-btn save-btn" onClick={handleSalvarTreino}>
-              💾 Salvar Treino
-            </button>
+            <button className="add-btn save-btn" onClick={handleSalvarTreino}>💾 Salvar Treino</button>
 
             <div className="exercicios-lista">
               <h4>Exercícios adicionados:</h4>
@@ -260,9 +251,7 @@ export default function CreateWorkout() {
                   <li key={idx}>
                     <strong>{ex.diaSemana}</strong> - {ex.nome} - {ex.series} séries - {ex.repeticoes} repetições - Carga: {ex.carga}
                     {ex.videoURL && (
-                      <button className="video-btn-small" onClick={() => window.open(ex.videoURL, '_blank')}>
-                        ▶️
-                      </button>
+                      <button className="video-btn-small" onClick={() => window.open(ex.videoURL, '_blank')}>▶️</button>
                     )}
                     <button className="edit-btn" onClick={() => editarExercicio(idx)}>✏️</button>
                     <button className="delete-btn" onClick={() => excluirExercicio(idx)}>🗑️</button>
@@ -271,9 +260,7 @@ export default function CreateWorkout() {
               </ul>
             </div>
 
-            <button className="close-btn" onClick={fecharModal}>
-              Fechar
-            </button>
+            <button className="close-btn" onClick={fecharModal}>Fechar</button>
           </div>
         </div>
       )}

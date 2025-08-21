@@ -9,6 +9,7 @@ export default function StudentDashboard() {
   const [abaAtiva, setAbaAtiva] = useState("iniciais");
   const [menuAberto, setMenuAberto] = useState(false);
   const [diaSelecionado, setDiaSelecionado] = useState("");
+  const [opcoesDiasTreino, setOpcoesDiasTreino] = useState([]);
   const navigate = useNavigate();
 
   const ordemDias = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
@@ -31,6 +32,8 @@ export default function StudentDashboard() {
       perfil: alunoEncontrado.perfil || {},
       treino: alunoEncontrado.treino || [],
     });
+    const diasTreinoDisponiveis = alunoEncontrado.treino.map(t => t.dia).filter((v, i, a) => a.indexOf(v) === i);
+    setOpcoesDiasTreino(diasTreinoDisponiveis);
   }, [navigate]);
 
   function validarCPF(cpf) {
@@ -205,7 +208,7 @@ export default function StudentDashboard() {
               Filtrar por dia:
               <select value={diaSelecionado} onChange={(e) => setDiaSelecionado(e.target.value)}>
                 <option value="">Todos os dias</option>
-                {ordemDias.map((dia) => (
+                {opcoesDiasTreino.map((dia) => (
                   <option key={dia} value={dia}>{dia}</option>
                 ))}
               </select>

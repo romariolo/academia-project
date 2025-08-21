@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import getAlunos from '../data/Students';
+import { getAlunos } from '../data/Students.js';
 import '../styles/LoginPage.css';
 
 function LoginPage() {
@@ -9,40 +9,21 @@ function LoginPage() {
   const navigate = useNavigate();
 
   const fakeUsers = [
-    {
-      email: 'personal@email.com',
-      password: 'a123456',
-      role: 'personal'
-    },
-    {
-      email: 'aluno@email.com',
-      password: 'a123456',
-      role: 'aluno'
-    },
-    {
-      email: 'admin@email.com',
-      password: 'a123456',
-      role: 'admin'
-    },
-    {
-      email: 'nutricionista@email.com',
-      password: 'a123456',
-      role: 'nutricionist'
-    }
+    { email: 'personal@email.com', password: 'a123456', role: 'personal' },
+    { email: 'aluno@email.com', password: 'a123456', role: 'aluno' },
+    { email: 'admin@email.com', password: 'a123456', role: 'admin' },
+    { email: 'nutricionista@email.com', password: 'a123456', role: 'nutricionist' }
   ];
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    const userFound = fakeUsers.find(
-      (u) => u.email === username && u.password === password
-    );
+    const userFound = fakeUsers.find(u => u.email === username && u.password === password);
 
     if (userFound) {
       if (userFound.role === 'personal') {
         navigate('/personal/dashboard');
       } else if (userFound.role === 'aluno') {
-        const alunos = getAlunos(); 
+        const alunos = getAlunos();
         const aluno = alunos.find(a => a.id === 2);
         localStorage.setItem('usuarioLogado', JSON.stringify(aluno));
         navigate('/student/dashboard');

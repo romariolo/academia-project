@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import alunosFake from "../../data/Students";
+import { getAlunos } from "../../data/Students";
 import "../../styles/personal/ProgressView.css";
 import BodySilhouette from "../../components/BodySilhouette.";
 
@@ -13,18 +13,12 @@ export default function ProgressView() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const alunosSalvos = JSON.parse(localStorage.getItem("alunosFake"));
-    if (alunosSalvos) {
-      // Garantir que todos tenham medidasIniciais
-      const atualizados = alunosSalvos.map((aluno) => ({
-        ...aluno,
-        medidasIniciais: aluno.medidasIniciais || aluno.medidas,
-      }));
-      setAlunos(atualizados);
-      localStorage.setItem("alunosFake", JSON.stringify(atualizados));
-    } else {
-      setAlunos(alunosFake);
-    }
+    const alunosSalvos = getAlunos().map((aluno) => ({
+      ...aluno,
+      medidasIniciais: aluno.medidasIniciais || aluno.medidas,
+    }));
+    setAlunos(alunosSalvos);
+    localStorage.setItem("alunosFake", JSON.stringify(alunosSalvos));
   }, []);
 
   const totalPaginas = Math.ceil(alunos.length / ALUNOS_POR_PAGINA);
@@ -162,70 +156,14 @@ export default function ProgressView() {
                 <div>
                   <h4>Variação</h4>
                   <ul>
-                    <li>
-                      Braço:{" "}
-                      {calcularVariacao(
-                        alunoSelecionado.medidasIniciais?.bracoCm,
-                        alunoSelecionado.medidas?.bracoCm
-                      )}{" "}
-                      cm
-                    </li>
-                    <li>
-                      Peito:{" "}
-                      {calcularVariacao(
-                        alunoSelecionado.medidasIniciais?.peitoCm,
-                        alunoSelecionado.medidas?.peitoCm
-                      )}{" "}
-                      cm
-                    </li>
-                    <li>
-                      Cintura:{" "}
-                      {calcularVariacao(
-                        alunoSelecionado.medidasIniciais?.cinturaCm,
-                        alunoSelecionado.medidas?.cinturaCm
-                      )}{" "}
-                      cm
-                    </li>
-                    <li>
-                      Quadril:{" "}
-                      {calcularVariacao(
-                        alunoSelecionado.medidasIniciais?.quadrilCm,
-                        alunoSelecionado.medidas?.quadrilCm
-                      )}{" "}
-                      cm
-                    </li>
-                    <li>
-                      Glúteos:{" "}
-                      {calcularVariacao(
-                        alunoSelecionado.medidasIniciais?.gluteosCm,
-                        alunoSelecionado.medidas?.gluteosCm
-                      )}{" "}
-                      cm
-                    </li>
-                    <li>
-                      Coxas:{" "}
-                      {calcularVariacao(
-                        alunoSelecionado.medidasIniciais?.coxaCm,
-                        alunoSelecionado.medidas?.coxaCm
-                      )}{" "}
-                      cm
-                    </li>
-                    <li>
-                      Panturrilha:{" "}
-                      {calcularVariacao(
-                        alunoSelecionado.medidasIniciais?.panturrilhaCm,
-                        alunoSelecionado.medidas?.panturrilhaCm
-                      )}{" "}
-                      cm
-                    </li>
-                    <li>
-                      Peso:{" "}
-                      {calcularVariacao(
-                        alunoSelecionado.medidasIniciais?.pesoKg,
-                        alunoSelecionado.medidas?.pesoKg
-                      )}{" "}
-                      kg
-                    </li>
+                    <li>Braço: {calcularVariacao(alunoSelecionado.medidasIniciais?.bracoCm, alunoSelecionado.medidas?.bracoCm)} cm</li>
+                    <li>Peito: {calcularVariacao(alunoSelecionado.medidasIniciais?.peitoCm, alunoSelecionado.medidas?.peitoCm)} cm</li>
+                    <li>Cintura: {calcularVariacao(alunoSelecionado.medidasIniciais?.cinturaCm, alunoSelecionado.medidas?.cinturaCm)} cm</li>
+                    <li>Quadril: {calcularVariacao(alunoSelecionado.medidasIniciais?.quadrilCm, alunoSelecionado.medidas?.quadrilCm)} cm</li>
+                    <li>Glúteos: {calcularVariacao(alunoSelecionado.medidasIniciais?.gluteosCm, alunoSelecionado.medidas?.gluteosCm)} cm</li>
+                    <li>Coxas: {calcularVariacao(alunoSelecionado.medidasIniciais?.coxaCm, alunoSelecionado.medidas?.coxaCm)} cm</li>
+                    <li>Panturrilha: {calcularVariacao(alunoSelecionado.medidasIniciais?.panturrilhaCm, alunoSelecionado.medidas?.panturrilhaCm)} cm</li>
+                    <li>Peso: {calcularVariacao(alunoSelecionado.medidasIniciais?.pesoKg, alunoSelecionado.medidas?.pesoKg)} kg</li>
                   </ul>
                 </div>
               </div>

@@ -11,20 +11,21 @@ export default function StudentsList() {
   const [alunos, setAlunos] = useState([]);
 
   useEffect(() => {
-    const lista = getAlunos();
+    const lista = getAlunos().map(aluno => ({
+      ...aluno,
+      treino: aluno.treino || []
+    }));
     setAlunos(lista);
   }, []);
 
   const alunosFiltrados = useMemo(() => {
     let filtrados = [...alunos];
     if (filtroTreino === "treino-ok") {
-      filtrados = filtrados.filter((aluno) => aluno.treino.length > 0);
+      filtrados = filtrados.filter(aluno => aluno.treino.length > 0);
     } else if (filtroTreino === "treino-faltando") {
-      filtrados = filtrados.filter((aluno) => aluno.treino.length === 0);
+      filtrados = filtrados.filter(aluno => aluno.treino.length === 0);
     }
-    filtrados.sort((a, b) =>
-      a.nome.toLowerCase().localeCompare(b.nome.toLowerCase())
-    );
+    filtrados.sort((a, b) => a.nome.toLowerCase().localeCompare(b.nome.toLowerCase()));
     return filtrados;
   }, [filtroTreino, alunos]);
 
@@ -74,7 +75,13 @@ export default function StudentsList() {
               </span>
               <button
                 className="btn-treino"
-                onClick={() => navigate(`/personal/create-workout?id=${aluno.id}`)}
+                onClick={() => {
+                  if (aluno.treino.length === 0) {
+                    alert("Este aluno ainda não possui treino cadastrado.");
+                  } else {
+                    navigate(`/personal/create-workout?id=${aluno.id}`);
+                  }
+                }}
               >
                 ➕ Criar/Editar Treino
               </button>
