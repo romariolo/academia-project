@@ -11,7 +11,6 @@ export default function StudentDashboard() {
   const [diaSelecionado, setDiaSelecionado] = useState("");
   const [opcoesDiasTreino, setOpcoesDiasTreino] = useState([]);
   const navigate = useNavigate();
-
   const ordemDias = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
 
   useEffect(() => {
@@ -25,14 +24,22 @@ export default function StudentDashboard() {
       navigate("/login");
       return;
     }
+    const treinoLista = alunoEncontrado.treino || [];
     setAluno({
       ...alunoEncontrado,
       medidasIniciais: alunoEncontrado.medidasIniciais || {},
       medidas: alunoEncontrado.medidas || {},
       perfil: alunoEncontrado.perfil || {},
-      treino: alunoEncontrado.treino || [],
+      treino: treinoLista,
     });
-    const diasTreinoDisponiveis = alunoEncontrado.treino.map(t => t.dia).filter((v, i, a) => a.indexOf(v) === i);
+    const diasTreinoDisponiveis = Array.from(
+      new Set(
+        (treinoLista || []).map((t) => {
+          const d = t.dia || t.diaSemana || "";
+          return String(d).split("-")[0].split(" ")[0];
+        }).filter(Boolean)
+      )
+    );
     setOpcoesDiasTreino(diasTreinoDisponiveis);
   }, [navigate]);
 
@@ -88,6 +95,11 @@ export default function StudentDashboard() {
     navigate("/login");
   }
 
+  function normalizeDia(t) {
+    const raw = t?.dia || t?.diaSemana || "";
+    return String(raw).split("-")[0].split(" ")[0];
+  }
+
   if (!aluno) return null;
 
   const camposMedidas = [
@@ -120,9 +132,9 @@ export default function StudentDashboard() {
 
   const treinosPorDia = ordemDias.map(dia => ({
     dia,
-    treinos: aluno.treino.filter(t => t.dia === dia)
+    treinos: (aluno.treino || []).filter(t => normalizeDia(t) === dia)
   }));
-  const treinosFiltrados = aluno.treino.filter(t => t.dia === diaSelecionado);
+  const treinosFiltrados = (aluno.treino || []).filter(t => normalizeDia(t) === diaSelecionado);
 
   return (
     <div className="student-dashboard-container">
@@ -214,8 +226,8 @@ export default function StudentDashboard() {
               </select>
             </label>
 
-            {(!diaSelecionado && treinosPorDia.every((d) => d.treinos.length === 0)) ||
-             (diaSelecionado && treinosFiltrados.length === 0) ? (
+            {((!diaSelecionado && treinosPorDia.every((d) => d.treinos.length === 0)) ||
+             (diaSelecionado && treinosFiltrados.length === 0)) ? (
               <p>Nenhum treino disponível.</p>
             ) : (
               !diaSelecionado ? (
@@ -226,7 +238,7 @@ export default function StudentDashboard() {
                       <ul>
                         {treinos.map((ex, idx) => (
                           <li key={idx}>
-                            <span>{ex.nome} - {ex.series}x{ex.repeticoes} - Carga: {ex.carga}</span>
+                            <span>{ex.nome || ex.nomeExercicio} - {ex.series}x{ex.repeticoes} - Carga: {ex.carga}</span>
                             {ex.videoURL && (
                               <button className="video-btn-small" onClick={() => window.open(ex.videoURL, "_blank")}>▶️</button>
                             )}
@@ -240,7 +252,7 @@ export default function StudentDashboard() {
                 <ul>
                   {treinosFiltrados.map((ex, idx) => (
                     <li key={idx}>
-                      <span>{ex.nome} - {ex.series}x{ex.repeticoes} - Carga: {ex.carga}</span>
+                      <span>{ex.nome || ex.nomeExercicio} - {ex.series}x{ex.repeticoes} - Carga: {ex.carga}</span>
                       {ex.videoURL && (
                         <button className="video-btn-small" onClick={() => window.open(ex.videoURL, "_blank")}>▶️</button>
                       )}

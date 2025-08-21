@@ -94,25 +94,15 @@ export default function PersonalDashboard() {
       <header className="dashboard-header">
         <h1>Área do Personal Trainer</h1>
         <div>
-          <button onClick={() => setShowPerfilModal(true)} className="btn">
-            Perfil
-          </button>
-          <button onClick={handleLogout} className="btn logout-btn">
-            Sair
-          </button>
+          <button onClick={() => setShowPerfilModal(true)} className="btn">Perfil</button>
+          <button onClick={handleLogout} className="btn logout-btn">Sair</button>
         </div>
       </header>
 
       <section className="dashboard-actions">
-        <Link to="/personal/students" className="btn">
-          📋 Meus Alunos
-        </Link>
-        <Link to="/personal/create-workout" className="btn">
-          ➕ Criar Treino
-        </Link>
-        <Link to="/personal/progress/1" className="btn">
-          📊 Visualizar Progresso
-        </Link>
+        <Link to="/personal/students" className="btn">📋 Meus Alunos</Link>
+        <Link to="/personal/create-workout" className="btn">➕ Criar Treino</Link>
+        <Link to="/personal/progress/1" className="btn">📊 Visualizar Progresso</Link>
       </section>
 
       <section className="dashboard-summary">

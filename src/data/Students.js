@@ -81,7 +81,13 @@ export function salvarAluno(alunoAtualizado) {
   const alunos = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
   const index = alunos.findIndex(a => a.id === alunoAtualizado.id);
   if (index >= 0) {
-    alunos[index] = { ...alunos[index], ...alunoAtualizado };
+    alunos[index] = { 
+      ...alunos[index], 
+      perfil: { ...alunos[index].perfil, ...alunoAtualizado.perfil },
+      medidasIniciais: { ...alunos[index].medidasIniciais, ...alunoAtualizado.medidasIniciais },
+      medidas: { ...alunos[index].medidas, ...alunoAtualizado.medidas },
+      treino: [...alunoAtualizado.treino]
+    };
   } else {
     alunos.push(alunoAtualizado);
   }
