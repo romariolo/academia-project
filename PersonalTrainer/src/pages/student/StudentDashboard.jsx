@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../services/api";
-import BodySilhouette from "../../components/BodySilhouette";
+import BodySilhouette from "../../components/BodySilhouette.";
 import SelectPersonal from "../../pages/personal/SelectPersonal";
 import "../../styles/student/StudentDashboard.css";
 
