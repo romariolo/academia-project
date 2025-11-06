@@ -1,0 +1,172 @@
+.students-list {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: #fafafa;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+}
+
+.students-list h1 {
+  text-align: center;
+  margin-bottom: 1.2rem;
+  color: #222;
+  font-weight: 700;
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+
+.filtros-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-bottom: 1.2rem;
+}
+
+.filtro-container {
+  flex: 1 1 220px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: #444;
+  user-select: none;
+}
+
+.filtro-container label {
+  min-width: 110px;
+}
+
+.filtro-container select {
+  flex: 1;
+  padding: 0.35rem 0.7rem;
+  border: 1.8px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+  cursor: pointer;
+}
+
+.filtro-container select:hover,
+.filtro-container select:focus {
+  border-color: #2980b9;
+  outline: none;
+}
+
+.students-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.2rem 0;
+}
+
+.students-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.7rem 1rem;
+  margin-bottom: 0.6rem;
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  cursor: default;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.students-list li:hover {
+  background-color: #f0f8ff;
+  box-shadow: 0 4px 12px rgba(41, 128, 185, 0.3);
+}
+
+.aluno-nome {
+  font-weight: 700;
+  color: #2c3e50;
+  font-size: 1.05rem;
+}
+
+.situacao-treino {
+  margin-left: 10px;
+  padding: 3px 7px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  font-weight: 700;
+}
+
+.treino-ok {
+  background-color: #27ae60;
+  color: #fff;
+}
+
+.treino-faltando {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+.paginacao {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.paginacao button {
+  background-color: #2980b9;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.95rem;
+  box-shadow: 0 3px 8px rgba(41, 128, 185, 0.4);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.paginacao button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.paginacao button:hover:not(:disabled) {
+  background-color: #1c5980;
+  box-shadow: 0 5px 14px rgba(28, 89, 128, 0.7);
+}
+
+.voltar-btn {
+  background: none;
+  border: none;
+  color: #2980b9;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: auto;
+  user-select: none;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0.1rem 0;
+  transition: color 0.3s ease;
+}
+
+.voltar-btn:hover {
+  color: #1c5980;
+}
+
+.nenhum-aluno {
+  text-align: center;
+  padding: 1rem;
+  color: #777;
+  font-style: italic;
+}
